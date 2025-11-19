@@ -9,12 +9,20 @@ interface CartSidebarProps {
   cart: CartItem[];
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  selectedRestaurant: string | null;
 }
 
-export const CartSidebar = ({ cart, onUpdateQuantity, onRemoveItem }: CartSidebarProps) => {
+export const CartSidebar = ({ cart, onUpdateQuantity, onRemoveItem, selectedRestaurant }: CartSidebarProps) => {
   const navigate = useNavigate();
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleCheckout = () => {
+    if (selectedRestaurant) {
+      localStorage.setItem('fastpass_selected_restaurant', selectedRestaurant);
+    }
+    navigate('/checkout');
+  };
 
   return (
     <Sheet>
@@ -89,7 +97,7 @@ export const CartSidebar = ({ cart, onUpdateQuantity, onRemoveItem }: CartSideba
                 <Button 
                   className="w-full" 
                   size="lg"
-                  onClick={() => navigate('/checkout')}
+                  onClick={handleCheckout}
                 >
                   Checkout
                 </Button>

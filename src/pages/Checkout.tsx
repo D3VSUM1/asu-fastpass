@@ -37,7 +37,7 @@ const Checkout = () => {
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name.trim() || !venmoHandle.trim()) {
@@ -49,6 +49,10 @@ const Checkout = () => {
       return;
     }
 
+    const selectedRestaurantId = localStorage.getItem('fastpass_selected_restaurant') || 'chickfila';
+    const { restaurants } = await import('@/data/menu');
+    const restaurant = restaurants.find(r => r.id === selectedRestaurantId);
+
     const order: Order = {
       id: crypto.randomUUID(),
       customerName: name,
@@ -57,10 +61,14 @@ const Checkout = () => {
       total,
       status: 'received',
       createdAt: new Date().toISOString(),
+      restaurantId: selectedRestaurantId,
+      restaurantName: restaurant?.name || 'Restaurant',
+      estimatedTime: restaurant?.waitTime || 15,
     };
 
     orderStore.addOrder(order);
     localStorage.removeItem('fastpass_cart');
+    localStorage.removeItem('fastpass_selected_restaurant');
     
     toast({
       title: 'Order placed!',

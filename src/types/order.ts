@@ -20,4 +20,7 @@ export interface Order {
   total: number;
   status: OrderStatus;
   createdAt: string;
+  restaurantId: string;
+  restaurantName: string;
+  estimatedTime: number; // in minutes
 }

@@ -35,7 +35,10 @@ export const OrderStatusCard = ({ order }: OrderStatusCardProps) => {
         <div className="flex justify-between items-start">
           <div>
             <CardTitle>Order #{order.id.slice(0, 8)}</CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-sm font-semibold text-primary mt-1">
+              {order.restaurantName}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
               {new Date(order.createdAt).toLocaleString()}
             </p>
           </div>
@@ -66,32 +69,44 @@ export const OrderStatusCard = ({ order }: OrderStatusCardProps) => {
           </div>
           
           {/* Status Timeline */}
-          <div className="pt-4 space-y-3">
+          <div className="pt-4 space-y-2">
+            <h4 className="font-semibold mb-3 text-sm text-muted-foreground">Order Progress</h4>
             <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                 order.status === 'received' || order.status === 'in_progress' || order.status === 'ready'
                   ? 'bg-success' : 'bg-muted'
               }`}>
                 <CheckCircle2 className="w-5 h-5 text-white" />
               </div>
-              <span className="text-sm">Order Received</span>
+              <div className="flex-1">
+                <span className="text-sm font-semibold">Order Received</span>
+                <p className="text-xs text-muted-foreground">We've got your order!</p>
+              </div>
             </div>
+            <div className="ml-5 h-8 w-0.5 bg-border"></div>
             <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                 order.status === 'in_progress' || order.status === 'ready'
                   ? 'bg-primary' : 'bg-muted'
               }`}>
                 <Package className="w-5 h-5 text-white" />
               </div>
-              <span className="text-sm">In Progress</span>
+              <div className="flex-1">
+                <span className="text-sm font-semibold">Preparing</span>
+                <p className="text-xs text-muted-foreground">Kitchen is working on it</p>
+              </div>
             </div>
+            <div className="ml-5 h-8 w-0.5 bg-border"></div>
             <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                 order.status === 'ready' ? 'bg-success' : 'bg-muted'
               }`}>
                 <CheckCircle2 className="w-5 h-5 text-white" />
               </div>
-              <span className="text-sm">Ready for Pickup</span>
+              <div className="flex-1">
+                <span className="text-sm font-semibold">Ready for Pickup</span>
+                <p className="text-xs text-muted-foreground">Come get your food!</p>
+              </div>
             </div>
           </div>
         </div>
