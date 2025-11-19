@@ -145,6 +145,26 @@ const Admin = () => {
           </Card>
         </div>
 
+        {/* AI Demand Prediction Alert */}
+        <Card className="mb-8 border-primary/50 bg-primary/5">
+          <CardContent className="pt-6">
+            <div className="flex gap-3">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-lg">🤖</span>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">AI Demand Prediction</h3>
+                <p className="text-sm text-muted-foreground">
+                  High volume predicted <strong>12:00 PM - 1:30 PM</strong>. 
+                  Prioritize pre-prep! Expected surge: <strong>+40% orders</strong>
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="space-y-4">
           {orders.map((order) => (
             <Card key={order.id}>
@@ -153,7 +173,10 @@ const Admin = () => {
                   <div>
                     <CardTitle>Order #{order.id.slice(0, 8)}</CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {order.customerName} • {new Date(order.createdAt).toLocaleTimeString()}
+                      {order.customerName} • {order.restaurantName}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(order.createdAt).toLocaleTimeString()}
                     </p>
                   </div>
                   <Badge className={

@@ -58,9 +58,20 @@ const OrderTracking = () => {
         </Button>
 
         <h1 className="text-4xl font-bold mb-2">Track Your Order</h1>
-        <p className="text-muted-foreground mb-8">
+        <p className="text-muted-foreground mb-4">
           Hello {order.customerName}, here's the status of your order
         </p>
+
+        {order.status !== 'ready' && (
+          <div className="mb-6 p-4 bg-primary/10 border border-primary/20 rounded-lg">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Estimated time until ready:</span>
+              <span className="text-2xl font-bold text-primary">
+                {order.status === 'received' ? order.estimatedTime : Math.ceil(order.estimatedTime / 2)} min
+              </span>
+            </div>
+          </div>
+        )}
 
         <OrderStatusCard order={order} />
 
