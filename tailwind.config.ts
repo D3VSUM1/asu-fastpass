@@ -55,6 +55,8 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'asu-maroon': "hsl(var(--asu-maroon))",
+        'asu-gold': "hsl(var(--asu-gold))",
       },
       borderRadius: {
         lg: "var(--radius)",
