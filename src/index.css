@@ -8,79 +8,46 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 20 14% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14% 10%;
-
-    --primary: 38 92% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 345 72% 35%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 38 100% 95%;
-    --accent-foreground: 38 92% 50%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 38 92% 50%;
-
-    --radius: 0.75rem;
-
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .dark {
-    --background: 20 14% 10%;
+    --background: 0 0% 7%;
     --foreground: 0 0% 98%;
 
-    --card: 20 14% 12%;
+    --card: 0 0% 11%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 20 14% 12%;
+    --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 38 92% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 45 100% 57%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 345 72% 40%;
+    --secondary: 352 64% 33%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 20 14% 20%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 38 92% 20%;
-    --accent-foreground: 38 92% 50%;
+    --accent: 45 100% 57%;
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 98%;
 
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 45 100% 57%;
+    --warning-foreground: 0 0% 0%;
 
-    --border: 20 14% 20%;
-    --input: 20 14% 20%;
-    --ring: 38 92% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 45 100% 57%;
+
+    --radius: 0.75rem;
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --asu-maroon: 352 64% 33%;
+    --asu-gold: 45 100% 57%;
   }
 }
 
@@ -91,5 +58,16 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
