@@ -9,7 +9,7 @@ interface CartSidebarProps {
   cart: CartItem[];
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
-  selectedRestaurant: string | null;
+  selectedRestaurant: { id: string; name: string } | null;
 }
 
 export const CartSidebar = ({ cart, onUpdateQuantity, onRemoveItem, selectedRestaurant }: CartSidebarProps) => {
@@ -19,7 +19,7 @@ export const CartSidebar = ({ cart, onUpdateQuantity, onRemoveItem, selectedRest
 
   const handleCheckout = () => {
     if (selectedRestaurant) {
-      localStorage.setItem('fastpass_selected_restaurant', selectedRestaurant);
+      localStorage.setItem('fastpass_selected_restaurant', selectedRestaurant.id);
     }
     navigate('/checkout');
   };

@@ -1,12 +1,22 @@
 import { useState, useEffect } from 'react';
 import { restaurants } from '@/data/menu';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { CartItem, MenuItem } from '@/types/order';
+import { MenuItemCard } from '@/components/MenuItemCard';
+import { CartSidebar } from '@/components/CartSidebar';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 type TabType = 'home' | 'rituals' | 'live';
 
 const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [lastOrder, setLastOrder] = useState<any>(null);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const selectedRestaurantId = searchParams.get('restaurant');
 
   useEffect(() => {
     const orders = localStorage.getItem('fastpass_orders');
@@ -16,7 +26,53 @@ const Index = () => {
         setLastOrder(parsedOrders[parsedOrders.length - 1]);
       }
     }
+    
+    const savedCart = localStorage.getItem('fastpass_cart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('fastpass_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  const handleAddToCart = (item: MenuItem) => {
+    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+    
+    if (existingItem) {
+      setCart(
+        cart.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        )
+      );
+    } else {
+      setCart([...cart, { ...item, quantity: 1 }]);
+    }
+    
+    toast({
+      title: 'Added to cart',
+      description: `${item.name} added to your cart`,
+    });
+  };
+
+  const handleUpdateQuantity = (itemId: string, quantity: number) => {
+    if (quantity === 0) {
+      setCart(cart.filter((item) => item.id !== itemId));
+    } else {
+      setCart(
+        cart.map((item) =>
+          item.id === itemId ? { ...item, quantity } : item
+        )
+      );
+    }
+  };
+
+  const handleRemoveItem = (itemId: string) => {
+    setCart(cart.filter((item) => item.id !== itemId));
+  };
 
   const getWaitTimeColor = (waitTime: number) => {
     if (waitTime < 10) return 'text-success';
@@ -32,6 +88,68 @@ const Index = () => {
 
   const sortedRestaurants = [...restaurants].sort((a, b) => a.waitTime - b.waitTime);
   const longestWaitRestaurants = sortedRestaurants.slice(-2);
+  const selectedRestaurant = restaurants.find(r => r.id === selectedRestaurantId);
+
+  if (selectedRestaurant) {
+    return (
+      <div className="h-screen flex flex-col overflow-hidden max-w-md mx-auto bg-background text-foreground">
+        <header className="p-4 flex justify-between items-center bg-card border-b border-border">
+          <div>
+            <h1 className="text-xl font-bold">
+              <span className="text-foreground">ASU</span>{' '}
+              <span className="text-asu-gold">Eats</span>
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              <i className="fas fa-map-marker-alt"></i> MU, Tempe Campus
+            </p>
+          </div>
+          <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs">
+            JD
+          </div>
+        </header>
+
+        <div className="flex-1 overflow-y-auto p-4">
+          <Button
+            variant="ghost"
+            onClick={() => setSearchParams({})}
+            className="mb-4"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Restaurants
+          </Button>
+
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-4xl">{selectedRestaurant.emoji}</span>
+              <div>
+                <h1 className="text-3xl font-bold">{selectedRestaurant.name}</h1>
+                <p className={`text-sm ${getWaitTimeColor(selectedRestaurant.waitTime)}`}>
+                  {getWaitTimeLabel(selectedRestaurant.waitTime)}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            {selectedRestaurant.menuItems.map((item) => (
+              <MenuItemCard
+                key={item.id}
+                item={item}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        </div>
+
+        <CartSidebar
+          cart={cart}
+          onUpdateQuantity={handleUpdateQuantity}
+          onRemoveItem={handleRemoveItem}
+          selectedRestaurant={selectedRestaurant}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col overflow-hidden max-w-md mx-auto bg-background text-foreground">
