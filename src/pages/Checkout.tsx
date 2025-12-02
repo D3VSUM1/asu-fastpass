@@ -35,11 +35,13 @@ const Checkout = () => {
     }
   }, [navigate, toast]);
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const serviceFee = subtotal * 0.10;
+  const total = subtotal + serviceFee;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!name.trim() || !venmoHandle.trim()) {
       toast({
         title: 'Missing information',
@@ -69,12 +71,12 @@ const Checkout = () => {
     orderStore.addOrder(order);
     localStorage.removeItem('fastpass_cart');
     localStorage.removeItem('fastpass_selected_restaurant');
-    
+
     toast({
       title: 'Order placed!',
       description: 'Your order has been received',
     });
-    
+
     navigate(`/order/${order.id}`);
   };
 
@@ -88,8 +90,8 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-background py-8">
       <div className="container mx-auto px-4 max-w-2xl">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           onClick={() => navigate('/')}
           className="mb-6"
         >
@@ -117,9 +119,19 @@ const Checkout = () => {
                     </span>
                   </div>
                 ))}
-                <div className="border-t pt-2 flex justify-between font-bold">
-                  <span>Total</span>
-                  <span className="text-primary">${total.toFixed(2)}</span>
+                <div className="border-t pt-2 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Subtotal</span>
+                    <span>${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Service Fee (10%)</span>
+                    <span>${serviceFee.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-bold pt-2 border-t">
+                    <span>Total</span>
+                    <span className="text-primary">${total.toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
             </CardContent>
